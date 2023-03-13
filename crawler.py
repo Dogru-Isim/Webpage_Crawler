@@ -1,6 +1,7 @@
 #!/bin/env python3
 
 import requests as req
+import requests.exceptions
 import re
 import sys
 
@@ -52,8 +53,12 @@ def main():
     api_keyword = 'api'  #TODO: Take api_keyword from user
     js_included_word = ''  #TODO: Take js_included_word from user
 
-    page = get_url(target)  #TODO: Take target from user
-
+    try:
+        page = get_url(target)  #TODO: Take target from user
+    except requests.exceptions.ConnectionError:
+        print("The target doesn't exist.")
+        sys.exit()
+        
     links = find_link(page, link_included_word)
     domains = find_domain(page, domain_included_word)
     apis = find_api(page, api_included_word, api_keyword)
